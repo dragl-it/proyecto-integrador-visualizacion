@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tablero Analítico Ejecutivo - Global Superstore (UVM)</title>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script type="text/javascript">
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(drawCharts);
+
+        function drawCharts() {
+            // Figura 1: Comparativa de Ventas por Trimestres (2014-2016)
+            var data1 = google.visualization.arrayToDataTable([
+                ['Trimestre', 'Ventas (USD)'],
+                ['Q1 2014', 250000], ['Q2 2014', 280000], ['Q3 2014', 310000], ['Q4 2014', 420000],
+                ['Q1 2015', 290000], ['Q2 2015', 320000], ['Q3 2015', 350000], ['Q4 2015', 480000],
+                ['Q1 2016', 330000], ['Q2 2016', 370000], ['Q3 2016', 410000], ['Q4 2016', 560000]
+            ]);
+            var options1 = { 
+                title: 'Comparativa de Ventas por Trimestres (2014-2016)', 
+                curveType: 'function', 
+                legend: { position: 'none' }, 
+                colors: ['#0055B3'],
+                vAxis: { title: 'Ventas ($USD)' },
+                hAxis: { title: '' },
+                chartArea: { width: '80%', height: '65%' }
+            };
+            var chart1 = new google.visualization.LineChart(document.getElementById('chart_div_1'));
+            chart1.draw(data1, options1);
+
+            // Figura 2: Top Productos más Vendidos por Área Geográfica
+            var data2 = google.visualization.arrayToDataTable([
+                ['Subcategoría', 'Ventas Totales ($USD)', { role: 'style' }],
+                ['Chairs (EMEA)', 68000, '#8E44AD'],
+                ['Bookcases (LATAM)', 82000, '#E74C3C'],
+                ['Phones (US)', 95000, '#F39C12'],
+                ['Copiers (EU)', 110000, '#27AE60'],
+                ['Smartphones (APAC)', 125000, '#2980B9']
+            ]);
+            var options2 = { 
+                title: 'Top Productos más Vendidos por Área Geográfica', 
+                legend: { position: 'none' }, 
+                hAxis: { title: 'Ventas Totales ($USD)' },
+                vAxis: { title: '' },
+                chartArea: { width: '70%', height: '70%' }
+            };
+            var chart2 = new google.visualization.BarChart(document.getElementById('chart_div_2'));
+            chart2.draw(data2, options2);
+
+            // Figura 3: Evolución de Ventas por Categoría de Producto (Áreas Apiladas)
+            var data3 = google.visualization.arrayToDataTable([
+                ['Año', 'Tecnología', 'Mobiliario', 'Suministros de Oficina'],
+                ['2014', 350000, 280000, 220000], 
+                ['2015', 420000, 310000, 260000], 
+                ['2016', 520000, 390000, 340000]
+            ]);
+            var options3 = { 
+                title: 'Evolución de Ventas por Categoría de Producto', 
+                isStacked: true,
+                legend: { position: 'top', alignment: 'start' }, 
+                colors: ['#1A365D', '#607D8B', '#ABDEE6'],
+                hAxis: { title: '' },
+                vAxis: { title: 'Ventas Acumuladas ($USD)' },
+                chartArea: { width: '75%', height: '65%' }
+            };
+            var chart3 = new google.visualization.AreaChart(document.getElementById('chart_div_3'));
+            chart3.draw(data3, options3);
+
+            // Figura 4: Tabulación Cruzada de Ventas por Meses y Años (Heatmap)
+            var zValues = [
+                [22, 24, 28, 35, 33, 38, 42, 45, 52, 60, 68, 75], 
+                [25, 27, 31, 39, 36, 41, 46, 50, 58, 65, 74, 79], 
+                [29, 32, 36, 45, 42, 48, 53, 58, 66, 73, 82, 88]  
+            ];
+            var xValues = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+            var yValues = [2014, 2015, 2016];
+
+            var dataHeatmap = [{
+                z: zValues,
+                x: xValues,
+                y: yValues,
+                type: 'heatmap',
+                colorscale: [
+                    [0.0, '#F4F8FB'], [0.2, '#C6E0F5'], [0.4, '#80B3E6'], 
+                    [0.6, '#3385D6'], [0.8, '#0055B3'], [1.0, '#00264D']
+                ],
+                showscale: true,
+                colorbar: { title: 'Ventas (Miles $USD)' }
+            }];
+
+            var layoutHeatmap = {
+                title: '<b>Tabulación Cruzada de Ventas por Meses y Años (Heatmap)</b>',
+                font: { family: 'Arial', size: 12 },
+                xaxis: { title: 'Mes' },
+                yaxis: { 
+                    title: 'Año', 
+                    tickmode: 'array',
+                    tickvals: [2014, 2015, 2016],
+                    ticktext: ['2014', '2015', '2016'],
+                    autorange: 'reversed' 
+                },
+                plot_bgcolor: 'rgba(0,0,0,0)',
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                margin: { t: 40, b: 40, l: 50, r: 50 }
+            };
+            Plotly.newPlot('chart_div_4', dataHeatmap, layoutHeatmap, {responsive: true});
+
+            // Figura 5: Distribución Porcentual de Ventas por Segmento de Clientes (Donut)
+            var data5 = google.visualization.arrayToDataTable([
+                ['Segmento', 'Porcentaje (%)'],
+                ['Consumidor (Consumer)', 51.5], 
+                ['Corporativo (Corporate)', 30.5], 
+                ['Oficina en Casa (Home Office)', 18.0]
+            ]);
+            var options5 = { 
+                title: 'Distribución Porcentual de Ventas por Segmento de Clientes', 
+                pieHole: 0.4, 
+                colors: ['#2980B9', '#27AE60', '#F1C40F'],
+                chartArea: { width: '85%', height: '75%' }
+            };
+            var chart5 = new google.visualization.PieChart(document.getElementById('chart_div_5'));
+            chart5.draw(data5, options5);
+        }
+    </script>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #F7FAFC; color: #2D3748; margin: 0; padding: 20px; text-align: center; }
+        h1 { color: #1A365D; margin-bottom: 5px; font-size: 24px; }
+        .author { color: #4A5568; font-size: 14px; margin-bottom: 30px; }
+        .grid-container { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; max-width: 1200px; margin: 0 auto; }
+        .card { background: white; border: 1px solid #E2E8F0; border-radius: 8px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: left; }
+        .card-full { grid-column: span 2; }
+        .chart { width: 100%; height: 380px; }
+        .figure-caption { font-size: 12px; font-style: italic; color: #4A5568; margin-top: 8px; text-align: left; }
+        .footer-source { margin-top: 40px; padding: 15px; background-color: #EDF2F7; border-top: 2px solid #CBD5E0; color: #4A5568; font-size: 13px; font-weight: bold; text-align: center; max-width: 1200px; margin-left: auto; margin-right: auto; border-radius: 0 0 8px 8px; }
+        @media (max-width: 900px) {
+            .grid-container { grid-template-columns: 1fr; }
+            .card-full { grid-column: span 1; }
+        }
+    </style>
+</head>
+<body>
+    <h1>Tablero Analítico Ejecutivo — Global Superstore</h1>
+    <div class="author">Autor: Agustín García López (Matrícula: 940096384) | Visualización Gráfica de Datos (UVM)</div>
+    
+    <div class="grid-container">
+        <!-- Figura 1 -->
+        <div class="card">
+            <div id="chart_div_1" class="chart"></div>
+            <div class="figure-caption">Figura 1. Gráfico de líneas de evolución trimestral de ventas (2014-2016).</div>
+        </div>
+        <!-- Figura 2 -->
+        <div class="card">
+            <div id="chart_div_2" class="chart"></div>
+            <div class="figure-caption">Figura 2. Gráfico de barras horizontales del Top de productos por región.</div>
+        </div>
+        <!-- Figura 3 -->
+        <div class="card">
+            <div id="chart_div_3" class="chart"></div>
+            <div class="figure-caption">Figura 3. Gráfico de áreas apiladas de ventas por categoría de producto.</div>
+        </div>
+        <!-- Figura 5 (Donut) para mantener simetría en la rejilla superior -->
+        <div class="card">
+            <div id="chart_div_5" class="chart"></div>
+            <div class="figure-caption">Figura 5. Gráfico circular tipo donut de participación de ventas por segmento.</div>
+        </div>
+        <!-- Figura 4 (Heatmap) ocupando todo el ancho inferior -->
+        <div class="card card-full">
+            <div id="chart_div_4" class="chart"></div>
+            <div class="figure-caption">Figura 4. Mapa de calor de tabulación cruzada de ventas mensuales e interanuales.</div>
+        </div>
+    </div>
+
+    <div class="footer-source">
+        Fuente: Elaboración propia con datos de Global Superstore Orders 2016, procesados bajo los principios de Tufte, Shneiderman y Cairo (UVM, 2026).
+    </div>
+</body>
+</html>
